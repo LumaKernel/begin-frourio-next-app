@@ -38,7 +38,7 @@
     "typecheck": "tsc --noEmit",
     "prebuild": "frourio-express && aspida",
     "build": "run-s build:*",
-    "build:next": "next export",
+    "build:next": "next build && next export",
     "build:handler": "npx esbuild frourio-handler/index.ts --tsconfig=tsconfig-handler.json --bundle --platform=node --outfile=frourio-handler/index.js",
     "pretest": "frourio-express && aspida",
     "test": "run-s test:*",
