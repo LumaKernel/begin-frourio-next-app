@@ -1,4 +1,4 @@
-[![Begin build status](https://buildstatus.begin.app/sing-k1i/status.svg)](https://begin.com)
+$BADGE
 
 ## Deploy your own
 
