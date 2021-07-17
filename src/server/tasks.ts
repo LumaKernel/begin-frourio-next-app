@@ -21,6 +21,8 @@ export const createTask = async (label: Task["label"]): Promise<Task> =>
     table,
     label,
     done: false,
+    // TTL is 1 hour. Note that it is not guaranteed to be deleted right after the TTL.
+    ttl: Date.now() / 1000 + 60 * 60,
   });
 
 export const updateTask = async (
