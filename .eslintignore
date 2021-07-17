@@ -1,0 +1,7 @@
+node_modules
+/frourio-handler/.upload/
+/frourio-handler/index.js
+/$server.ts
+/api/**/$*
+/.next
+/out

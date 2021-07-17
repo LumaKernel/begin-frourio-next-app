@@ -1,0 +1,18 @@
+pubilc/favicon.png
+  - licensed under the MIT License
+  - https://github.com/frouriojs/create-frourio-app/blob/master/LICENSE
+
+pubilc/vercel.svg
+  - licensed under the MIT License
+  - https://github.com/vercel/next.js/blob/canary/license.md
+
+src/...
+validators/...
+begin-express-handler/types.d.ts
+froiurio-handler/...
+top level files
+  - public domain by LumaKernel
+
+begin-express-handler/index.ts
+  - licensed under the MIT License by github.com/frouriojs
+
