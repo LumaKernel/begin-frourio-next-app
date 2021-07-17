@@ -1,4 +1,4 @@
-[![Begin build status](https://buildstatus.begin.app/.../status.svg)](https://begin.com)
+[![Begin build status](https://buildstatus.begin.app/sing-k1i/status.svg)](https://begin.com)
 
 ## Deploy your own
 
@@ -12,4 +12,4 @@ Deploy your own clone of this app to Begin!
 
 ## Reference
 
-- WIP...
+- TODO
