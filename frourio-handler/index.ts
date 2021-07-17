@@ -17,7 +17,16 @@ const init = (): Express => {
       methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     }),
   );
-  server(app, { basePath: "/api" });
+  const multer =
+    process.env.NODE_ENV === "development"
+      ? undefined
+      : {
+          dest: "/tmp/.upload",
+        };
+  server(app, {
+    basePath: "/api",
+    multer,
+  });
   return app;
 };
 

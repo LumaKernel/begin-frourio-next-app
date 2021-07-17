@@ -8,4 +8,8 @@ export const apiClient =
           baseURL: "http://localhost:3333/api",
         }),
       )
-    : api(aspida());
+    : api(
+        aspida(undefined, {
+          baseURL: "/api",
+        }),
+      );

@@ -1,9 +1,9 @@
 .arc-env
 .DS_Store
-node_modules
+node_modules/
 
 /frourio-handler/index.js
-/frourio-handler/.upload/
+.upload/
 /$server.ts
 /api/**/$*
 /.next
