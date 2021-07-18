@@ -28,11 +28,11 @@
   },
   "scripts": {
     "start": "run-p start:*",
-    "start:next": "next dev",
     "start:api": "cross-env NODE_ENV=testing ARC_LOCAL=1 npx sandbox",
-    "start:frourio": "frourio-express -w",
     "start:aspida": "aspida -w",
+    "start:frourio": "frourio-express -w",
     "start:handler": "npm run build:handler -- --watch",
+    "start:next": "next dev",
     "lint": "eslint . --ext .js,.ts,.tsx",
     "fix": "npm run lint -- --fix",
     "typecheck": "tsc --noEmit",
