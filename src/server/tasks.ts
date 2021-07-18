@@ -39,7 +39,7 @@ export const updateTask = async (
 
 export const deleteTask = async (key: Task["key"]): Promise<Task> => {
   const old = await data.get({ table, key });
-  if (old === null) {
+  if (!old) {
     throw new Error(`Task key not found: ${key}`);
   }
   await data.destroy({ table, key });

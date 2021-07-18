@@ -1,19 +1,20 @@
-// TODO(frourio team): Planning to contribute them to proper projects.
+// TODO(frourio team): Working to contribute them to proper projects.
+// https://github.com/beginner-corp/begin-data/pull/85
 declare module "@begin/data" {
-  // NOTE(LICENSE): Documentation text is brought from official documents.
+  // NOTE(LICENSE): Documentation text is cited from official documents.
   export type BeginDataType =
     | number
     | string
     | boolean
     | null
     | Array<BeginDataType>
-    | Record<string, BeginDataType>;
-  export type DataGetSingle = {
+    | { [key: string]: BeginDataType | undefined };
+  export type DataGetSingleParams = {
     table: string;
     key: string;
   };
-  export type DataGetMultiple = Array<DataGetSingle>;
-  export type DataGetEntireTable = {
+  export type DataGetMultipleParams = Array<DataGetSingleParams>;
+  export type DataGetEntireTableParams = {
     table: string;
     limit?: number;
     /**
@@ -21,26 +22,36 @@ declare module "@begin/data" {
      */
     cursor?: string;
   };
-  export type DataGetSingleResult = {
-    table: string;
-    key: string;
-    [others: key]: BeginDataType;
-  } | null;
-  export type DataGetSingleCallback = (result: DataGetSingleResult) => void;
+  export type DataGetSingleResult =
+    | {
+        table: string;
+        key: string;
+        [others: string]: BeginDataType | undefined;
+      }
+    | null
+    | undefined;
+  export type DataGetSingleCallback = (
+    err: Error | null | undefined,
+    result: DataGetSingleResult,
+  ) => void;
   export type DataGetMultipleResult = Array<{
     table: string;
     key: string;
-    [others: key]: BeginDataType;
+    [others: string]: BeginDataType | undefined;
   }>;
-  export type DataGetMultipleCallback = (result: DataGetMultipleResult) => void;
+  export type DataGetMultipleCallback = (
+    err: Error | null | undefined,
+    result: DataGetMultipleResult,
+  ) => void;
   export type DataGetEntireTableResult = DataGetMultipleResult & {
     cursor?: string;
   };
   export type DataGetEntireTableCallback = (
+    err: Error | null | undefined,
     result: DataGetEntireTableResult,
   ) => void;
 
-  export type DataSetSingle = {
+  export type DataSetSingleParams = {
     table: string;
     /**
      * If no key is supplied, Begin Data will automatically supply a pseudo-random, unique, immutable key
@@ -55,41 +66,91 @@ declare module "@begin/data" {
      *
      * Tip: during the intervening time between ttl expiry and actual expunging, the document will still be available; if its ttl is mutated or unset, the document's new ttl state will be respected.
      */
-    ttl?: number;
-    [others: string]: BeginDataType;
+    ttl?: BeginDataType | undefined;
+    [others: string]: BeginDataType | undefined;
   };
-  export type DataSetMultiple = Array<DataSetSingle>;
-  export type DataSetResult = {
+  export type DataSetMultipleParams = Array<DataSetSingleParams>;
+  export type DataSetSingleResult = {
     table: string;
     key: string;
+    [others: string]: BeginDataType | undefined;
   };
-  export type DataSetCallback = () => DataSetResult;
+  export type DataSetSingleCallback = (
+    err: Error | null | undefined,
+    result: DataSetSingleResult,
+  ) => void;
+  export type DataSetMultipleResult = Array<{
+    table: string;
+    key: string;
+    [others: string]: BeginDataType | undefined;
+  }>;
+  export type DataSetMultipleCallback = (
+    err: Error | null | undefined,
+    result: DataSetMultipleResult,
+  ) => void;
 
-  export type DataDestroySingle = {
+  export type DataDestroySingleParams = {
     table: string;
     key: string;
   };
-  export type DataDestroyMultiple = Array<DataDestroySingle>;
-  export type DataDestroyCallback = () => void;
+  export type DataDestroyMultipleParams = Array<DataDestroySingleParams>;
+  export type DataDestroySingleResult = void;
+  export type DataDestroyMultipleResult = void;
+  export type DataDestroySingleCallback = (
+    err: Error | null | undefined,
+  ) => void;
+  export type DataDestroyMultipleCallback = (
+    err: Error | null | undefined,
+  ) => void;
 
   export type DataCountParams = {
     table: string;
   };
-  export type DataCountCallback = () => void;
+  export type DataCountResult = number;
+  export type DataCountCallback = (
+    err: Error | null | undefined,
+    result: DataCountResult,
+  ) => void;
 
   export type DataIncrementParams = {
     table: string;
     key: string;
     prop: string;
   };
-  export type DataIncrementCallback = () => void;
+  export type DataIncrementResult = {
+    table: string;
+    key: string;
+    [others: string]: BeginDataType | undefined;
+  };
+  export type DataIncrementCallback = (
+    err: Error | null | undefined,
+    result: DataGetSingleResult,
+  ) => void;
 
   export type DataDecrementParams = {
     table: string;
     key: string;
     prop: string;
   };
-  export type DataDecrementCallback = () => void;
+  export type DataDecrementResult = {
+    table: string;
+    key: string;
+    [others: string]: BeginDataType | undefined;
+  };
+  export type DataDecrementCallback = (
+    err: Error | null | undefined,
+    result: DataDecrementResult,
+  ) => void;
+
+  export type DataPageParams = {
+    table: string;
+    limit?: number;
+  };
+  export type DataPageResult = Array<{
+    table: string;
+    key: string;
+    [others: string]: BeginDataType | undefined;
+  }>;
 
   /**
    * @see https://docs.begin.com/en/data/begin-data
@@ -100,12 +161,15 @@ declare module "@begin/data" {
      *
      * data.get() can get a single document, batch get multiple documents, or get an entire table.
      */
-    get(params: DataGetSingle): Promise<DataGetSingleResult>;
-    get(params: DataGetSingle, callback: DataGetSingleCallback): void;
-    get(params: DataGetMultiple): Promise<DataGetMultipleResult>;
-    get(params: DataGetMultiple, callback: DataGetMultipleCallback): void;
-    get(params: DataGetEntireTable): Promise<DataGetEntireTableResult>;
-    get(params: DataGetEntireTable, params: DataGetEntireTableCallback): void;
+    get(params: DataGetSingleParams): Promise<DataGetSingleResult>;
+    get(params: DataGetSingleParams, callback: DataGetSingleCallback): void;
+    get(params: DataGetMultipleParams): Promise<DataGetMultipleResult>;
+    get(params: DataGetMultipleParams, callback: DataGetMultipleCallback): void;
+    get(params: DataGetEntireTableParams): Promise<DataGetEntireTableResult>;
+    get(
+      params: DataGetEntireTableParams,
+      params: DataGetEntireTableCallback,
+    ): void;
 
     /**
      * data.set() is responsible for creating new documents, and updating existing ones.
@@ -127,47 +191,55 @@ declare module "@begin/data" {
      *   - data.set() has a maximum batch size of 25 documents and 10KB per call.
      *   - Empty attributes are invalid and will produce errors.
      */
-    set(params: DataSetSingle | DataSetMultiple): Promise<DataSetResult>;
-    set(
-      params: DataSetSingle | DataSetMultiple,
-      callback: DataSetCallback,
-    ): void;
+    set(params: DataSetSingleParams): Promise<DataSetSingleResult>;
+    set(params: DataSetSingleParams, callback: DataSetSingleCallback): void;
+    set(params: DataSetMultipleParams): Promise<DataSetMultipleeResult>;
+    set(params: DataSetMultipleParams, callback: DataSetMultipleCallback): void;
 
     /**
      * data.destroy() is responsible for destroying documents.
      *
      * Valid data.destroy() calls require passing a one or more objects containing a table and key; there is no limit to the number of documents a single call can destroy.
      */
+    destroy(params: DataDestroySingleParams): Promise<DataDestroySingleResult>;
     destroy(
-      params: DataDestroySingle | DataDestroyMultiple,
-    ): Promise<Parameters<DataDestroyCallback>>;
+      params: DataDestroySingleParams,
+      callback: DataDestroySingleCallback,
+    ): void;
     destroy(
-      params: DataDestroySingle | DataDestroyMultiple,
-      callback: DataDestroyCallback,
+      params: DataDestroyMultipleParams,
+    ): Promise<DataDestroyMultipleResult>;
+    destroy(
+      params: DataDestroyMultipleParams,
+      callback: DataDestroyMultipleCallback,
     ): void;
 
     /**
      * data.count() returns the count of a table's documents.
      */
-    count(params: DataCountParams): Promise<Parameters<DataCountCallback>>;
+    count(params: DataCountParams): Promise<DataCountResult>;
     count(params: DataCountParams, callback: DataCountCallback): void;
 
     /**
      * data.incr() increments the number property.
      */
-    incr(
-      params: DataIncrementParams,
-    ): Promise<Parameters<DataIncrementCallback>>;
+    incr(params: DataIncrementParams): Promise<DataIncrementResult>;
     incr(params: DataIncrementParams, callback: DataIncrementCallback): void;
 
     /**
      * data.decr() decrements the number property.
      */
-    incr(
-      params: DataDecrementParams,
-    ): Promise<Parameters<DataDecrementCallback>>;
-    incr(params: DataDecrementParams, callback: DataDecrementCallback): void;
+    decr(params: DataDecrementParams): Promise<DataDecrementResult>;
+    decr(params: DataDecrementParams, callback: DataDecrementCallback): void;
+
+    /**
+     * data.page()
+     */
+    page(params: DataPageParams): AsyncIterable<DataPageResult>;
   }
+  /**
+   * @see https://docs.begin.com/en/data/begin-data
+   */
   const data: BeginData;
   export default data;
 }

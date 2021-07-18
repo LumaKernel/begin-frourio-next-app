@@ -16,7 +16,7 @@ export const getUserInfoById = async (key: string): Promise<UserInfo> => {
       table,
       key,
     });
-    if (tmp === null) {
+    if (!tmp) {
       return await data.set({
         table,
         key,
