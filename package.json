@@ -2,30 +2,6 @@
   "name": "frourio-next-app",
   "version": "0.0.0",
   "description": "Begin frourio Next.js app",
-  "arc": {
-    "app": "frourio-next-app",
-    "http": [
-      {
-        "/api/*": {
-          "method": "any",
-          "src": "/frourio-handler"
-        }
-      }
-    ],
-    "tables": [
-      {
-        "data": {
-          "scopeID": "*String",
-          "dataID": "**String",
-          "ttl": "TTL"
-        }
-      }
-    ],
-    "static": {
-      "folder": "out",
-      "spa": true
-    }
-  },
   "scripts": {
     "start": "run-p start:*",
     "start:api": "cross-env NODE_ENV=testing ARC_LOCAL=1 npx sandbox",
@@ -33,7 +9,7 @@
     "start:frourio": "frourio-express -w",
     "start:handler": "npm run build:handler -- --watch",
     "start:next": "next dev",
-    "lint": "eslint . --ext .js,.ts,.tsx",
+    "lint": "eslint --ext .js,.cjs,.mjs,.ts,.tsx .",
     "fix": "npm run lint -- --fix",
     "typecheck": "tsc --noEmit",
     "prebuild": "frourio-express && aspida",
@@ -42,7 +18,7 @@
     "build:handler": "npx esbuild frourio-handler/index.ts --tsconfig=tsconfig-handler.json --bundle --platform=node --outfile=frourio-handler/index.js",
     "pretest": "frourio-express && aspida",
     "test": "run-s test:*",
-    "test:typecheck": "npm run typecheck"
+    "test:types": "npm run typecheck"
   },
   "dependencies": {
     "@vendia/serverless-express": "^4.3.9",
