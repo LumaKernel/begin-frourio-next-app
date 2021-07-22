@@ -2,6 +2,34 @@
   "name": "frourio-next-app",
   "version": "0.0.0",
   "description": "Begin frourio Next.js app",
+  "arc": {
+    "app": [
+      "frourio-next-app"
+    ],
+    "http": [
+      {
+        "/api/*": {
+          "method": "any",
+          "src": "/frourio-handler"
+        }
+      }
+    ],
+    "tables": [
+      {
+        "data": {
+          "scopeID": "*String",
+          "dataID": "**String",
+          "ttl": "TTL"
+        }
+      }
+    ],
+    "static": [
+      {
+        "folder": "out",
+        "spa": true
+      }
+    ]
+  },
   "scripts": {
     "start": "run-p start:*",
     "start:api": "cross-env NODE_ENV=testing ARC_LOCAL=1 npx sandbox",
